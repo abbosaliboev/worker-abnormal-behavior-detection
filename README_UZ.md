@@ -1,6 +1,6 @@
 # Ishchilarning Anormal Xatti-Harakatini Aniqlash
 
-Ishchilarning anormal xatti-harakatini real vaqtda aniqlash tizimi. Pose estimation va ob'ektlarni kuzatish asosida ishlaydi. Model train qilish talab etilmaydi — faqat biomexanik qoidalar.
+Ishchilarning anormal xatti-harakatini real vaqtda aniqlash tizimi. Pose estimation va ob'ektlarni kuzatish asosida ishlaydi. Model train qilish talab etilmaydi.
 
 **[English](README.md) | [한국어](README_KO.md)**
 
@@ -18,6 +18,44 @@ Ishchilarning anormal xatti-harakatini real vaqtda aniqlash tizimi. Pose estimat
 
 ---
 
+## Loyiha Tuzilmasi
+
+```
+worker-abnormal-behavior-detection/
+│
+├── fall_detection/               # Yiqilish aniqlash moduli
+│   ├── detector.py               # Aniqlash mantiqi (qoidalar)
+│   └── evaluate.py               # Baholash skripti
+│
+├── running_detection/            # Xavfli yugurish moduli
+│   ├── detector.py               # Aniqlash mantiqi (qoidalar)
+│   └── evaluate.py               # Baholash skripti
+│
+├── inactivity_detection/         # Uzoq harakatsizlik moduli
+│   ├── detector.py               # Aniqlash mantiqi (qoidalar)
+│   └── evaluate.py               # Baholash skripti
+│
+├── src/                          # Umumiy modullar
+│   ├── config.py                 # Barcha threshold va sozlamalar
+│   ├── pose_extractor.py         # YOLO11n-pose + ByteTracker
+│   ├── feature_extractor.py      # Biomexanik feature hisoblash
+│   └── behavior_monitor.py       # 3 ta detektori boshqaradi
+│
+├── datasets/                     # Dataset yordamchilari
+│   ├── npy_loader.py             # X.npy yuklash
+│   └── download_running.py       # KTH datasetni yuklab olish
+│
+├── evaluation/
+│   └── feature_utils.py          # Umumiy feature yordamchisi
+│
+├── main.py                       # Real-vaqt demo
+├── requirements.txt
+├── REPORT.md                     # Texnik hisobot
+└── README.md / README_UZ.md / README_KO.md
+```
+
+---
+
 ## Tizim Qanday Ishlaydi
 
 ```
@@ -27,18 +65,19 @@ YOLO11n-pose  →  Har bir odamdan 17 ta bo'g'im
       ↓
 ByteTracker   →  Har ishchiga alohida ID
       ↓
-┌──────────────┬─────────────────┬───────────────────┐
-│ Yiqilish     │ Yugurish        │ Harakatsizlik     │
-│ Detektori    │ Detektori       │ Detektori         │
-└──────────────┴─────────────────┴───────────────────┘
+┌──────────────────┬──────────────────┬──────────────────┐
+│ fall_detection/  │running_detection/│inactivity_       │
+│ detector.py      │ detector.py      │detection/        │
+│                  │                  │ detector.py      │
+└──────────────────┴──────────────────┴──────────────────┘
       ↓
 Ogohlantirish (FALL | RUNNING | INACTIVITY)
 ```
 
-### Yiqilishni Aniqlash Mantiq
-- **Tana burchagi** (vertikaldan) va **burchak o'zgarish tezligi** (°/sek) o'lchanadi
+### Yiqilish Aniqlash Mantiq
+- **Tana burchagi** va **burchak o'zgarish tezligi** (°/sek) o'lchanadi
 - Qoida: `tana_burchagi > 70° VA burchak_tezligi > 65°/sek`
-- Yiqilish juda tez (74–140°/sek), ataylab yotish esa sekin (2–5°/sek)
+- Yiqilish tez (74–140°/sek), ataylab yotish esa sekin (2–5°/sek)
 
 ### Xavfli Yugurish Mantiq
 - **Markaziy massaning gorizontal tezligi** har kadrda kuzatiladi
@@ -63,33 +102,38 @@ Ogohlantirish (FALL | RUNNING | INACTIVITY)
 
 ---
 
-## Datasetlar
-
-### UP-Fall Detection Dataset
-- Martinez-Velasco va b., *Data* 2019
-- Aktivliklar: yiqilish (4 tur), yurish, turish, o'tirish, narsa olish
-- Maqsad: Yiqilish va Harakatsizlik baholash
-
-### KTH Action Dataset
-- Schuldt va b., *ICPR* 2004
-- 25 ta subject, 200 ta klip (100 yugurish + 100 yurish)
-- Maqsad: Yugurish aniqlash baholash
-
----
-
 ## O'rnatish
 
 ```bash
 pip install -r requirements.txt
 ```
 
-**Talablar:** Python 3.10+, PyTorch, Ultralytics YOLO, OpenCV, SciPy
+---
+
+## Baholash
+
+Har bir detektor uchun alohida baholash:
+
+```bash
+# Yiqilish aniqlash  →  92.4%
+python -m fall_detection.evaluate
+
+# Xavfli yugurish  →  90.4%
+python -m running_detection.evaluate
+
+# Uzoq harakatsizlik  →  95.8%
+python -m inactivity_detection.evaluate
+```
+
+KTH datasetni yuklab olish (yugurish baholashdan oldin):
+```bash
+python -m datasets.download_running
+```
 
 ---
 
-## Ishlatish
+## Real-vaqt Demo
 
-### Real-vaqt Demo
 ```bash
 # Webcam
 python main.py
@@ -99,51 +143,6 @@ python main.py --source video.mp4
 
 # RTSP oqim
 python main.py --source rtsp://192.168.1.10/stream
-
-# Kuzatishsiz (bitta kishi)
-python main.py --no-tracking
-```
-
-### Baholash
-```bash
-# Yiqilish + Harakatsizlik (UP-Fall)
-python -m evaluation.evaluate
-
-# Yugurish (KTH)
-python -m evaluation.eval_running_kth_calibrated
-
-# To'liq harakatsizlik baholash
-python -m evaluation.eval_inactivity_full
-```
-
-### KTH Datasetini Yuklash
-```bash
-python -m datasets.download_running_dataset
-```
-
----
-
-## Loyiha Tuzilmasi
-
-```
-├── src/
-│   ├── config.py               # Threshold va sozlamalar
-│   ├── pose_extractor.py       # YOLO11n-pose + ByteTracker
-│   ├── feature_extractor.py    # Biomexanik featurelar
-│   ├── fall_detector.py        # Yiqilish qoidalari
-│   ├── running_detector.py     # Yugurish qoidalari
-│   ├── inactivity_detector.py  # Har ishchi uchun taymer
-│   └── behavior_monitor.py     # Barcha detektor boshqaruvi
-├── evaluation/
-│   ├── evaluate.py                      # Yiqilish + Harakatsizlik LOOCV
-│   ├── eval_running_kth_calibrated.py   # Yugurish LOOCV (KTH)
-│   └── eval_inactivity_full.py          # To'liq harakatsizlik baholash
-├── datasets/
-│   ├── npy_loader.py                    # X.npy yuklash
-│   └── download_running_dataset.py      # KTH yuklab olish
-├── main.py                              # Real-vaqt demo
-├── requirements.txt
-└── REPORT.md                            # Texnik hisobot
 ```
 
 ---
@@ -154,12 +153,3 @@ python -m datasets.download_running_dataset
 - **ByteTracker** — Ko'p kishilik doimiy ID kuzatish
 - **Butterworth Filter** — Yiqilish kinematikasi uchun signal tekislash
 - **Rule-based Logic** — Model train qilinmagan, to'liq tushuntiriladi
-
----
-
-## Muhim Dizayn Qarorlari
-
-- **Train talab yo'q** — Qoidalar biomexanikadan olingan, dataset statistikasi bo'yicha kalibrlangan
-- **Ko'p kishi** — ByteTracker har ishchiga alohida ID va mustaqil taymer beradi
-- **Cascade arxitektura** — Yiqilish → Yugurish → Harakatsizlik (ketma-ket tekshiruv)
-- **Threshold kalibrasyon** — LOOCV ichida per-fold kalibrasyon cross-subject umumlashishni ta'minlaydi

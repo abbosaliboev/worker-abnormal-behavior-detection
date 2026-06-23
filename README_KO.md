@@ -18,6 +18,44 @@
 
 ---
 
+## 프로젝트 구조
+
+```
+worker-abnormal-behavior-detection/
+│
+├── fall_detection/               # 낙상 감지 모듈
+│   ├── detector.py               # 감지 로직 (규칙)
+│   └── evaluate.py               # 평가 스크립트
+│
+├── running_detection/            # 위험 달리기 모듈
+│   ├── detector.py               # 감지 로직 (규칙)
+│   └── evaluate.py               # 평가 스크립트
+│
+├── inactivity_detection/         # 장시간 무활동 모듈
+│   ├── detector.py               # 감지 로직 (규칙)
+│   └── evaluate.py               # 평가 스크립트
+│
+├── src/                          # 공유 핵심 모듈
+│   ├── config.py                 # 임계값 및 설정
+│   ├── pose_extractor.py         # YOLO11n-pose + ByteTracker
+│   ├── feature_extractor.py      # 생체역학적 특징 추출
+│   └── behavior_monitor.py       # 세 감지기 통합 관리
+│
+├── datasets/                     # 데이터셋 유틸리티
+│   ├── npy_loader.py             # 사전 추출 키포인트 로드 (X.npy)
+│   └── download_running.py       # KTH 데이터셋 다운로드
+│
+├── evaluation/
+│   └── feature_utils.py          # 공유 특징 추출 도우미
+│
+├── main.py                       # 실시간 데모 진입점
+├── requirements.txt
+├── REPORT.md                     # 상세 기술 보고서
+└── README.md / README_UZ.md / README_KO.md
+```
+
+---
+
 ## 시스템 동작 원리
 
 ```
@@ -27,18 +65,19 @@ YOLO11n-pose  →  인물당 17개 관절 추출
       ↓
 ByteTracker   →  작업자별 고유 ID 부여
       ↓
-┌──────────────┬─────────────────┬───────────────────┐
-│ 낙상         │ 달리기          │ 무활동            │
-│ 감지기       │ 감지기          │ 감지기            │
-└──────────────┴─────────────────┴───────────────────┘
+┌──────────────────┬──────────────────┬──────────────────┐
+│ fall_detection/  │running_detection/│inactivity_       │
+│ detector.py      │ detector.py      │detection/        │
+│                  │                  │ detector.py      │
+└──────────────────┴──────────────────┴──────────────────┘
       ↓
 경보 (FALL | RUNNING | INACTIVITY)
 ```
 
 ### 낙상 감지 로직
-- **신체 기울기 각도** (수직 기준) 및 **각속도** (°/초) 측정
+- **신체 기울기 각도** 및 **각속도** (°/초) 측정
 - 규칙: `신체_각도 > 70° AND 각속도 > 65°/초`
-- 핵심: 낙상은 빠름(74–140°/초), 의도적 눕기는 느림(2–5°/초)
+- 낙상은 빠름(74–140°/초), 의도적 눕기는 느림(2–5°/초)
 
 ### 위험한 달리기 로직
 - 프레임별 **무게중심의 수평 이동 속도** 추적
@@ -63,33 +102,38 @@ ByteTracker   →  작업자별 고유 ID 부여
 
 ---
 
-## 데이터셋
-
-### UP-Fall Detection Dataset
-- Martinez-Velasco 외, *Data* 2019
-- 활동: 낙상(4가지 유형), 걷기, 서기, 앉기, 물건 줍기
-- 용도: 낙상 및 무활동 평가
-
-### KTH Action Dataset
-- Schuldt 외, *ICPR* 2004
-- 피험자 25명, 영상 200개 (달리기 100개 + 걷기 100개)
-- 용도: 달리기 감지 평가
-
----
-
 ## 설치
 
 ```bash
 pip install -r requirements.txt
 ```
 
-**요구 사항:** Python 3.10+, PyTorch, Ultralytics YOLO, OpenCV, SciPy
+---
+
+## 평가
+
+각 감지기를 개별적으로 평가:
+
+```bash
+# 낙상 감지  →  92.4%
+python -m fall_detection.evaluate
+
+# 위험한 달리기  →  90.4%
+python -m running_detection.evaluate
+
+# 장시간 무활동  →  95.8%
+python -m inactivity_detection.evaluate
+```
+
+달리기 평가 전 KTH 데이터셋 다운로드:
+```bash
+python -m datasets.download_running
+```
 
 ---
 
-## 사용법
+## 실시간 데모
 
-### 실시간 데모
 ```bash
 # 웹캠
 python main.py
@@ -99,51 +143,6 @@ python main.py --source video.mp4
 
 # RTSP 스트림
 python main.py --source rtsp://192.168.1.10/stream
-
-# 추적 없이 (단일 인물)
-python main.py --no-tracking
-```
-
-### 평가
-```bash
-# 낙상 + 무활동 평가 (UP-Fall)
-python -m evaluation.evaluate
-
-# 달리기 평가 (KTH)
-python -m evaluation.eval_running_kth_calibrated
-
-# 무활동 전체 평가
-python -m evaluation.eval_inactivity_full
-```
-
-### KTH 데이터셋 다운로드
-```bash
-python -m datasets.download_running_dataset
-```
-
----
-
-## 프로젝트 구조
-
-```
-├── src/
-│   ├── config.py               # 임계값 및 설정
-│   ├── pose_extractor.py       # YOLO11n-pose + ByteTracker
-│   ├── feature_extractor.py    # 생체역학적 특징 추출
-│   ├── fall_detector.py        # 낙상 감지 규칙
-│   ├── running_detector.py     # 달리기 감지 규칙
-│   ├── inactivity_detector.py  # 인물별 무활동 타이머
-│   └── behavior_monitor.py     # 전체 감지기 조율
-├── evaluation/
-│   ├── evaluate.py                      # 낙상 + 무활동 LOOCV
-│   ├── eval_running_kth_calibrated.py   # 달리기 LOOCV (KTH)
-│   └── eval_inactivity_full.py          # 무활동 전체 평가
-├── datasets/
-│   ├── npy_loader.py                    # 사전 추출 X.npy 로드
-│   └── download_running_dataset.py      # KTH 데이터셋 다운로더
-├── main.py                              # 실시간 데모
-├── requirements.txt
-└── REPORT.md                            # 상세 기술 보고서
 ```
 
 ---
@@ -154,12 +153,3 @@ python -m datasets.download_running_dataset
 - **ByteTracker** — 다중 인물 지속 ID 추적
 - **Butterworth Filter** — 낙상 운동학 신호 평활화
 - **규칙 기반 로직** — 모델 훈련 불필요, 완전한 해석 가능성
-
----
-
-## 주요 설계 결정
-
-- **훈련 불필요** — 규칙은 생체역학에서 도출되고 데이터셋 통계로 보정
-- **다중 인물** — ByteTracker로 각 작업자에게 독립적인 타이머 부여
-- **캐스케이드 구조** — 낙상 → 달리기 → 무활동 순서로 검사
-- **임계값 보정** — LOOCV 내 폴드별 보정으로 피험자 간 일반화 보장
