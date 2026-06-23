@@ -18,7 +18,7 @@ import pandas as pd
 from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score, confusion_matrix
 
 from datasets.npy_loader import load_npy_dataset
-from evaluation.eval_from_npy import extract_window_features
+from evaluation.feature_utils import extract_window_features
 
 ALL_SUBJECTS = [1, 2, 3, 4]
 INACT_POS    = {7, 8}    # standing, sitting
