@@ -4,7 +4,7 @@ Dataset : KTH Action Dataset (running vs walking, 25 subjects)
 Protocol: Leave-One-Out Cross-Validation (LOOCV, odd/even split)
 
 Command:
-    python -m evaluation.eval_running
+    python -m running_detection.evaluate
 """
 
 import sys, os

@@ -18,9 +18,9 @@ import numpy as np
 import cv2
 
 from src.pose_extractor import PoseExtractor, PoseFrame, draw_all_poses
-from src.fall_detector import FallDetector, FallEvent
-from src.running_detector import RunningDetector, RunEvent
-from src.inactivity_detector import InactivityDetector, InactivityEvent
+from fall_detection.detector import FallDetector, FallEvent
+from running_detection.detector import RunningDetector, RunEvent
+from inactivity_detection.detector import InactivityDetector, InactivityEvent
 from src.config import STGCN_FPS
 
 
