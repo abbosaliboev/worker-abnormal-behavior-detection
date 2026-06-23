@@ -1,0 +1,32 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+.Python
+*.egg-info/
+
+# Large binary / model files
+*.pt
+*.pth
+*.onnx
+*.npy
+*.avi
+*.mp4
+*.zip
+*.rar
+
+# Dataset folders
+data/
+iccas/subject1_2_3_4/cv_dataset/
+iccas/subject1_2_3_4/checkpoints/best_stgcn.pth
+
+# Claude memory
+.claude/
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
