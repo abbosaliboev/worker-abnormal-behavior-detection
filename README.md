@@ -134,7 +134,7 @@ Run each detector's evaluation separately:
 # Fall Detection   →  92.4%
 python -m fall_detection.evaluate
 
-# Unsafe Running   →  90.4%
+# Unsafe Running   →  91.0%
 python -m running_detection.evaluate
 
 # Long-time Inactivity  →  95.8%
