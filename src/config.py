@@ -10,7 +10,7 @@ All detectors  : Rule-based  (no ML model)
 NPY_DATA_DIR = r"f:\Project_F\Company_Abnormal_Project\iccas\subject1_2_3_4\cv_dataset"
 
 # YOLO pose model weights
-YOLO_POSE_MODEL = r"f:\Project_F\Company_Abnormal_Project\iccas\yolo11n-pose.pt"
+YOLO_POSE_MODEL = "yolo11s-pose.pt"   # auto-downloaded by ultralytics on first run
 
 # Raw video / PNG dataset (UP-Fall, Subject 1-4)
 UPFALL_DATASET_PATH = r"F:\Project_F\ICCAS_2026\fall_iccas\dataset"
