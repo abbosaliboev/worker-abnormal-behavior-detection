@@ -11,7 +11,7 @@ Ishchilarning anormal xatti-harakatini real vaqtda aniqlash tizimi. Pose estimat
 | Xatti-Harakat | Ta'rif | Aniqlik |
 |---|---|---|
 | **Yiqilishni Aniqlash** | Ishchi to'satdan yiqilganda bildiradi | 92.4% |
-| **Xavfli Yugurish** | Cheklangan zonada yugurish | 90.4% |
+| **Xavfli Yugurish** | Cheklangan zonada yugurish | 91.0% |
 | **Uzoq Harakatsizlik** | 5+ daqiqa harakatsiz qolish | 95.8% |
 
 > LOOCV (Leave-One-Out Cross-Validation) protokoli bilan baholangan.
@@ -96,9 +96,9 @@ Ogohlantirish (FALL | RUNNING | INACTIVITY)
 | Detektor | Aniqlik | Dataset | Protokol |
 |---|---|---|---|
 | Yiqilish | **92.40%** ± 3.4% | UP-Fall (4 subject) | LOOCV |
-| Yugurish | **90.42%** ± 1.9% | KTH Action (25 subject) | LOOCV |
+| Yugurish | **90.99%** ± 0.4% | KTH Action (25 subject) | LOOCV |
 | Harakatsizlik | **95.83%** ± 4.2% | UP-Fall (4 subject) | LOOCV |
-| **O'rtacha** | **92.88%** | | |
+| **O'rtacha** | **93.07%** | | |
 
 ---
 

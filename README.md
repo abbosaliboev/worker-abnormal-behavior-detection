@@ -11,7 +11,7 @@ A real-time rule-based system for detecting abnormal worker behaviors using pose
 | Behavior | Description | Accuracy |
 |---|---|---|
 | **Fall Detection** | Detects when a worker falls suddenly | 92.4% |
-| **Unsafe Running** | Detects running in restricted/dangerous zones | 90.4% |
+| **Unsafe Running** | Detects running in restricted/dangerous zones | 91.0% |
 | **Long-time Inactivity** | Detects workers motionless for 5+ minutes | 95.8% |
 
 > Evaluated using Leave-One-Out Cross-Validation (LOOCV) across subjects.
@@ -96,9 +96,9 @@ Alert  (FALL | RUNNING | INACTIVITY)
 | Detector | Accuracy | Dataset | Protocol |
 |---|---|---|---|
 | Fall | **92.40%** ± 3.4% | UP-Fall (4 subjects) | LOOCV |
-| Running | **90.42%** ± 1.9% | KTH Action (25 subjects) | LOOCV |
+| Running | **90.99%** ± 0.4% | KTH Action (25 subjects) | LOOCV |
 | Inactivity | **95.83%** ± 4.2% | UP-Fall (4 subjects) | LOOCV |
-| **Average** | **92.88%** | | |
+| **Average** | **93.07%** | | |
 
 ---
 
