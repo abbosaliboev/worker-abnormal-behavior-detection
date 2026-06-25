@@ -1,6 +1,6 @@
 # 작업자 이상 행동 감지 시스템
 
-포즈 추정과 객체 추적을 활용한 실시간 규칙 기반 이상 행동 감지 시스템입니다. 모델 훈련 없이 YOLO11n-pose 키포인트에 생체역학적 규칙을 적용합니다.
+포즈 추정과 객체 추적을 활용한 실시간 규칙 기반 이상 행동 감지 시스템입니다. 모델 훈련 없이 YOLO11s-pose 키포인트에 생체역학적 규칙을 적용합니다.
 
 **[English](README.md) | [O'zbek](README_UZ.md)**
 
@@ -37,7 +37,7 @@ worker-abnormal-behavior-detection/
 │
 ├── src/                          # 공유 핵심 모듈
 │   ├── config.py                 # 임계값 및 설정
-│   ├── pose_extractor.py         # YOLO11n-pose + ByteTracker
+│   ├── pose_extractor.py         # YOLO11s-pose + ByteTracker
 │   ├── feature_extractor.py      # 생체역학적 특징 추출
 │   └── behavior_monitor.py       # 세 감지기 통합 관리
 │
@@ -61,7 +61,7 @@ worker-abnormal-behavior-detection/
 ```
 CCTV / 카메라
       ↓
-YOLO11n-pose  →  인물당 17개 관절 추출
+YOLO11s-pose  →  인물당 17개 관절 추출
       ↓
 ByteTracker   →  작업자별 고유 ID 부여
       ↓
@@ -88,6 +88,32 @@ ByteTracker   →  작업자별 고유 ID 부여
 - **정지 프레임 비율** 및 **자세 안정성** 측정
 - 규칙: `정지_비율 > 0.70 AND 각도_표준편차 < 3.5°`
 - 타이머: 5분 연속 정지 시 경보 발생
+
+---
+
+## 데이터셋
+
+### UP-Fall Detection Dataset
+- **출처:** Martinez-Velasco 외, *Data* 2019 — [https://sites.google.com/up.edu.mx/har-up/](https://sites.google.com/up.edu.mx/har-up/)
+- **사용 피험자:** 4명 (Subject 1–4, 전체 17명 중)
+- **카메라:** RGB, ~17fps, 실내 환경
+- **총 윈도우:** 4,479개 (각 30프레임, 스트라이드 15)
+
+| 활동 | 레이블 | 윈도우 | 용도 |
+|---|---|---|---|
+| Act 1–5 (낙상 5가지) | 낙상 | 629 | 낙상 평가 |
+| Act 6 (걷기) | 활동 | 854 | 무활동 negative |
+| Act 7 (서기) | 무활동 | 844 | 무활동 positive |
+| Act 8 (앉기) | 무활동 | 834 | 무활동 positive |
+| Act 9 (물건 줍기) | 활동 | 120 | 무활동 negative |
+
+### KTH Action Dataset
+- **출처:** Schuldt 외, *ICPR* 2004 — [https://www.csc.kth.se/cvap/actions/](https://www.csc.kth.se/cvap/actions/)
+- **사용 피험자:** 25명 (전체)
+- **카메라:** 측면 뷰, 25fps, 실내외 환경
+- **총 클립:** 200개 (달리기 100개 + 걷기 100개)
+- **클립 길이:** 약 15초 (150프레임 사용)
+- **용도:** 달리기 감지 평가
 
 ---
 
@@ -149,7 +175,7 @@ python main.py --source rtsp://192.168.1.10/stream
 
 ## 핵심 기술
 
-- **YOLO11n-pose** — 실시간 17관절 포즈 추정
+- **YOLO11s-pose** — 실시간 17관절 포즈 추정
 - **ByteTracker** — 다중 인물 지속 ID 추적
 - **Butterworth Filter** — 낙상 운동학 신호 평활화
 - **규칙 기반 로직** — 모델 훈련 불필요, 완전한 해석 가능성

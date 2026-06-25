@@ -37,7 +37,7 @@ worker-abnormal-behavior-detection/
 │
 ├── src/                          # Umumiy modullar
 │   ├── config.py                 # Barcha threshold va sozlamalar
-│   ├── pose_extractor.py         # YOLO11n-pose + ByteTracker
+│   ├── pose_extractor.py         # YOLO11s-pose + ByteTracker
 │   ├── feature_extractor.py      # Biomexanik feature hisoblash
 │   └── behavior_monitor.py       # 3 ta detektori boshqaradi
 │
@@ -61,7 +61,7 @@ worker-abnormal-behavior-detection/
 ```
 CCTV / Kamera
       ↓
-YOLO11n-pose  →  Har bir odamdan 17 ta bo'g'im
+YOLO11s-pose  →  Har bir odamdan 17 ta bo'g'im
       ↓
 ByteTracker   →  Har ishchiga alohida ID
       ↓
@@ -88,6 +88,32 @@ Ogohlantirish (FALL | RUNNING | INACTIVITY)
 - **Sokin oynalar ulushi** va **poza barqarorligi** o'lchanadi
 - Qoida: `sokin_ulush > 0.70 VA burchak_std < 3.5°`
 - Taymer: 5 daqiqa uzluksiz harakatsizlikdan so'ng ogohlantirish
+
+---
+
+## Datasetlar
+
+### UP-Fall Detection Dataset
+- **Manba:** Martinez-Velasco va b., *Data* 2019 — [https://sites.google.com/up.edu.mx/har-up/](https://sites.google.com/up.edu.mx/har-up/)
+- **Ishlatilgan subjectlar:** 4 ta (Subject 1–4, jami 17 tadan)
+- **Kamera:** RGB, ~17 fps, ichki muhit
+- **Jami oynalar:** 4,479 ta (har biri 30 kadr, stride 15)
+
+| Aktivlik | Label | Oynalar | Maqsad |
+|---|---|---|---|
+| Act 1–5 (5 tur yiqilish) | Yiqilish | 629 | Fall baholash |
+| Act 6 (yurish) | Aktiv | 854 | Inactivity negative |
+| Act 7 (tik turish) | Harakatsiz | 844 | Inactivity positive |
+| Act 8 (o'tirish) | Harakatsiz | 834 | Inactivity positive |
+| Act 9 (narsa olish) | Aktiv | 120 | Inactivity negative |
+
+### KTH Action Dataset
+- **Manba:** Schuldt va b., *ICPR* 2004 — [https://www.csc.kth.se/cvap/actions/](https://www.csc.kth.se/cvap/actions/)
+- **Ishlatilgan subjectlar:** 25 ta (hammasi)
+- **Kamera:** Lateral ko'rinish, 25 fps, tashqi/ichki muhit
+- **Jami kliplar:** 200 ta (100 yugurish + 100 yurish)
+- **Klip uzunligi:** ~15 soniya (150 kadr ishlatildi)
+- **Maqsad:** Running aniqlash baholash
 
 ---
 
@@ -149,7 +175,7 @@ python main.py --source rtsp://192.168.1.10/stream
 
 ## Asosiy Texnologiyalar
 
-- **YOLO11n-pose** — Real vaqtda 17 ta bo'g'im aniqlash
+- **YOLO11s-pose** — Real vaqtda 17 ta bo'g'im aniqlash
 - **ByteTracker** — Ko'p kishilik doimiy ID kuzatish
 - **Butterworth Filter** — Yiqilish kinematikasi uchun signal tekislash
 - **Rule-based Logic** — Model train qilinmagan, to'liq tushuntiriladi

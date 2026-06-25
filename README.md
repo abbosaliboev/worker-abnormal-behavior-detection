@@ -1,6 +1,6 @@
 # Worker Abnormal Behavior Detection
 
-A real-time rule-based system for detecting abnormal worker behaviors using pose estimation and object tracking. No model training required — pure biomechanical rules applied to YOLO11n-pose keypoints.
+A real-time rule-based system for detecting abnormal worker behaviors using pose estimation and object tracking. No model training required — pure biomechanical rules applied to YOLO11s-pose keypoints.
 
 **[한국어](README_KO.md) | [O'zbek](README_UZ.md)**
 
@@ -37,7 +37,7 @@ worker-abnormal-behavior-detection/
 │
 ├── src/                          # Shared core modules
 │   ├── config.py                 # All thresholds and settings
-│   ├── pose_extractor.py         # YOLO11n-pose + ByteTracker
+│   ├── pose_extractor.py         # YOLO11s-pose + ByteTracker
 │   ├── feature_extractor.py      # Biomechanical feature computation
 │   └── behavior_monitor.py       # Orchestrates all three detectors
 │
@@ -61,7 +61,7 @@ worker-abnormal-behavior-detection/
 ```
 CCTV / Camera
       ↓
-YOLO11n-pose  →  17 body keypoints per person
+YOLO11s-pose  →  17 body keypoints per person
       ↓
 ByteTracker   →  Unique ID assigned to each worker
       ↓
@@ -105,14 +105,27 @@ Alert  (FALL | RUNNING | INACTIVITY)
 ## Datasets
 
 ### UP-Fall Detection Dataset
-- Martinez-Velasco et al., *Data* 2019
-- Activities: falling (5 types), walking, standing, sitting, picking up
-- Used for: Fall and Inactivity evaluation
+- **Source:** Martinez-Velasco et al., *Data* 2019 — [https://sites.google.com/up.edu.mx/har-up/](https://sites.google.com/up.edu.mx/har-up/)
+- **Subjects used:** 4 out of 17 (Subjects 1–4)
+- **Camera:** RGB, ~17 fps, indoor
+- **Total windows:** 4,479 (30 frames each, stride 15)
+- **Activities used:**
+
+| Activity | Label | Windows | Used for |
+|---|---|---|---|
+| Act 1–5 (5 fall types) | Fall | 629 | Fall evaluation |
+| Act 6 (walking) | Active | 854 | Inactivity negative |
+| Act 7 (standing) | Inactive | 844 | Inactivity positive |
+| Act 8 (sitting) | Inactive | 834 | Inactivity positive |
+| Act 9 (picking up) | Active | 120 | Inactivity negative |
 
 ### KTH Action Dataset
-- Schuldt et al., *ICPR* 2004
-- 25 subjects, 200 clips (100 running + 100 walking)
-- Used for: Running detection evaluation
+- **Source:** Schuldt et al., *ICPR* 2004 — [https://www.csc.kth.se/cvap/actions/](https://www.csc.kth.se/cvap/actions/)
+- **Subjects used:** 25 (all)
+- **Camera:** Lateral view, 25 fps, outdoor/indoor
+- **Total clips:** 200 (100 running + 100 walking)
+- **Clip length:** ~15 seconds each (first 150 frames used)
+- **Used for:** Running detection evaluation
 
 ---
 
@@ -165,7 +178,7 @@ python main.py --source rtsp://192.168.1.10/stream
 
 ## Core Technologies
 
-- **YOLO11n-pose** — Real-time 17-joint pose estimation
+- **YOLO11s-pose** — Real-time 17-joint pose estimation
 - **ByteTracker** — Multi-person persistent ID tracking
 - **Butterworth Filter** — Signal smoothing for fall kinematics
 - **Rule-based Logic** — No model training, fully interpretable
