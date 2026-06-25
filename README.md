@@ -75,19 +75,38 @@ Alert  (FALL | RUNNING | INACTIVITY)
 ```
 
 ### Fall Detection Logic
-- Computes **body tilt angle** and **angular rate of change** (°/sec)
-- Rule: `body_angle > 70° AND angle_rate > 65°/sec`
-- Key insight: falls are rapid (74–140°/sec), deliberate lying-down is slow (2–5°/sec)
+
+**Step 1 — Measure body tilt angle:** Every frame, the system calculates how far the person's spine has tilted from vertical (0° = upright, 90° = horizontal).
+
+**Step 2 — Measure tilt speed:** The system checks how fast that angle is changing (degrees per second).
+
+**Decision:** If the body is tilted more than 70° AND the tilt happened faster than 65°/sec → **FALL detected**
+
+> Why speed matters: a real fall happens in 0.3–0.5 seconds (rapid). Deliberately lying down takes 3–5 seconds (slow). Speed separates the two.
+
+---
 
 ### Unsafe Running Logic
-- Tracks **horizontal center-of-mass speed** frame by frame
-- Rule: `horizontal_speed > calibrated_threshold`
-- Running is ~2× faster than walking in lateral-camera setups
+
+**Step 1 — Track horizontal movement:** Every frame, the system measures how fast the person's center of mass moves horizontally across the camera frame.
+
+**Step 2 — Calibrate per environment:** The threshold is calibrated on training subjects to fit the specific camera setup.
+
+**Decision:** If horizontal speed exceeds the calibrated threshold → **RUNNING detected**
+
+> Running moves ~2× faster than walking in the camera frame.
+
+---
 
 ### Inactivity Logic
-- Measures **fraction of still frames** and **posture stability**
-- Rule: `still_fraction > 0.70 AND body_angle_std < 3.5°`
-- Timer: alert fires after 5 continuous minutes of stillness
+
+**Step 1 — Count still frames:** The system checks what fraction of recent frames have near-zero body joint movement.
+
+**Step 2 — Check posture stability:** It also checks whether the body angle is stable (a person picking up objects bends and straightens — excluded).
+
+**Step 3 — Start timer:** If both conditions hold, a 5-minute countdown begins. Any movement resets the timer to zero.
+
+**Decision:** If the worker stays motionless for 5 continuous minutes → **INACTIVITY alert**
 
 ---
 

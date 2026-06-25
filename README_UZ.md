@@ -75,19 +75,38 @@ Ogohlantirish (FALL | RUNNING | INACTIVITY)
 ```
 
 ### Yiqilish Aniqlash Mantiq
-- **Tana burchagi** va **burchak o'zgarish tezligi** (°/sek) o'lchanadi
-- Qoida: `tana_burchagi > 70° VA burchak_tezligi > 65°/sek`
-- Yiqilish tez (74–140°/sek), ataylab yotish esa sekin (2–5°/sek)
+
+**1-qadam — Burchakni o'lchash:** Har kadrda tana umurtqasining vertikaldan qanchalik qiyshayganini hisoblanadi (0° = tik, 90° = gorizontal).
+
+**2-qadam — Tezlikni o'lchash:** Burchakning qanchalik tez o'zgarayotgani aniqlanadi (darajalar/soniya).
+
+**Qaror:** Tana 70°dan ko'proq qiyshaygan VA bu 65°/sek dan tez sodir bo'lgan bo'lsa → **YIQILISH aniqlandi**
+
+> Nima uchun tezlik muhim: haqiqiy yiqilish 0.3–0.5 sekundda sodir bo'ladi (juda tez). Ataylab yotish esa 3–5 soniya davom etadi (sekin). Tezlik ikkalasini farqlaydi.
+
+---
 
 ### Xavfli Yugurish Mantiq
-- **Markaziy massaning gorizontal tezligi** har kadrda kuzatiladi
-- Qoida: `gorizontal_tezlik > kalibrlangan_chegara`
-- Yugurish yurgandan ~2x tezroq harakatlanadi
+
+**1-qadam — Gorizontal harakatni kuzatish:** Har kadrda markaziy massaning kamera bo'yicha gorizontal tezligi o'lchanadi.
+
+**2-qadam — Kalibrlash:** Chegara har bir muhit uchun training subjectlarida kalibrlash orqali topiladi.
+
+**Qaror:** Gorizontal tezlik kalibrlangan chegaradan oshsa → **YUGURISH aniqlandi**
+
+> Yugurish kamera kadrida yurgandan ~2x tezroq harakatlanadi.
+
+---
 
 ### Harakatsizlik Mantiq
-- **Sokin oynalar ulushi** va **poza barqarorligi** o'lchanadi
-- Qoida: `sokin_ulush > 0.70 VA burchak_std < 3.5°`
-- Taymer: 5 daqiqa uzluksiz harakatsizlikdan so'ng ogohlantirish
+
+**1-qadam — Sokin kadrlarni hisoblash:** So'nggi kadrlarda gavda bo'g'imlari deyarli qimirlamagan kadrlar ulushi hisoblanadi.
+
+**2-qadam — Poza barqarorligini tekshirish:** Tana burchagining barqarorligi ham tekshiriladi (narsa olayotgan odam egilib-to'g'rilanadi — u chiqarib tashlanadi).
+
+**3-qadam — Taymer:** Ikkala shart bajarilsa, 5 daqiqalik sanash boshlanadi. Har qanday harakat taymerni nolga qaytaradi.
+
+**Qaror:** Ishchi 5 daqiqa uzluksiz harakatsiz qolsa → **HARAKATSIZLIK ogohlantiriladi**
 
 ---
 
