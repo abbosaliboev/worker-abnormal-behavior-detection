@@ -1,19 +1,41 @@
 """
 Centralized configuration: all rule thresholds and dataset constants.
 
-Pose backbone  : YOLO11n-pose  (17 COCO keypoints)
+Pose backbone  : YOLO11s-pose  (17 COCO keypoints)
 All detectors  : Rule-based  (no ML model)
 """
 
+import os as _os
+
+# Project root = parent of this file's directory (src/)
+_PROJECT_ROOT = _os.path.dirname(_os.path.dirname(_os.path.abspath(__file__)))
+
 # ─── Paths ─────────────────────────────────────────────────────────────────────
 # Pre-processed X.npy / y.npy / meta.csv  (YOLO keypoints, already extracted)
-NPY_DATA_DIR = r"f:\Project_F\Company_Abnormal_Project\iccas\subject1_2_3_4\cv_dataset"
+NPY_DATA_DIR = _os.path.join(_PROJECT_ROOT, "data", "upfall_npy")
+
+# KTH running/walking video clips
+KTH_DATA_DIR = _os.path.join(_PROJECT_ROOT, "data", "running_dataset")
 
 # YOLO pose model weights
 YOLO_POSE_MODEL = "yolo11s-pose.pt"   # auto-downloaded by ultralytics on first run
 
-# Raw video / PNG dataset (UP-Fall, Subject 1-4)
-UPFALL_DATASET_PATH = r"F:\Project_F\ICCAS_2026\fall_iccas\dataset"
+# Raw video / image dataset (UP-Fall, Subject 1-4)
+# Prefer a local test dataset inside the project if it exists; otherwise fall back to the external path.
+
+def _resolve_upfall_dataset_path():
+    candidates = [
+        _os.path.join(_PROJECT_ROOT, "data", "test_upfall_data"),
+        _os.path.join(_PROJECT_ROOT, "data", "test_upfall"),
+        r"F:\Project_F\ICCAS_2026\fall_iccas\dataset",
+    ]
+    for path in candidates:
+        if _os.path.isdir(path):
+            return path
+    return candidates[0]
+
+
+UPFALL_DATASET_PATH = _resolve_upfall_dataset_path()
 
 # ─── Dataset ───────────────────────────────────────────────────────────────────
 STGCN_FPS    = 19.0   # FPS used during keypoint extraction → evaluation FPS
@@ -63,7 +85,7 @@ NUM_JOINTS = 17
 KP_VISIBILITY_THRESHOLD = 0.2
 
 # ─── YOLO detector settings ─────────────────────────────────────────────────────
-YOLO_CONF    = 0.10
+YOLO_CONF    = 0.05
 YOLO_VERBOSE = False
 
 # ─── Fall Detection (rule-based) ─────────────────────────────────────────────────

@@ -2,7 +2,7 @@
 
 A real-time rule-based system for detecting abnormal worker behaviors using pose estimation and object tracking. No model training required — pure biomechanical rules applied to YOLO11s-pose keypoints.
 
-**[한국어](README_KO.md) | [O'zbek](README_UZ.md)**
+**[한국어](README_KO.md)**
 
 ---
 
@@ -11,7 +11,7 @@ A real-time rule-based system for detecting abnormal worker behaviors using pose
 | Behavior | Description | Accuracy |
 |---|---|---|
 | **Fall Detection** | Detects when a worker falls suddenly | 92.4% |
-| **Unsafe Running** | Detects running in restricted/dangerous zones | 91.0% |
+| **Unsafe Running** | Detects running in restricted/dangerous zones | 90.99% |
 | **Long-time Inactivity** | Detects workers motionless for 5+ minutes | 95.8% |
 
 > Evaluated using Leave-One-Out Cross-Validation (LOOCV) across subjects.
@@ -42,16 +42,19 @@ worker-abnormal-behavior-detection/
 │   └── behavior_monitor.py       # Orchestrates all three detectors
 │
 ├── datasets/                     # Dataset utilities
-│   ├── npy_loader.py             # Load pre-extracted keypoints (X.npy)
-│   └── download_running.py       # Download KTH Action dataset
+│   └── npy_loader.py             # Load pre-extracted keypoints (X.npy)
 │
 ├── evaluation/
 │   └── feature_utils.py          # Shared feature extraction helper
 │
+├── data/
+│   ├── upfall_npy/               # Pre-extracted UP-Fall keypoints (X.npy, y.npy, meta.csv)
+│   └── running_dataset/          # KTH Action Dataset clips (200 x .avi)
+│
+├── results/                      # Evaluation outputs saved here
 ├── main.py                       # Real-time demo entry point
 ├── requirements.txt
-├── REPORT.md                     # Detailed technical report
-└── README.md / README_UZ.md / README_KO.md
+└── README.md / README_KO.md
 ```
 
 ---
@@ -160,22 +163,26 @@ pip install -r requirements.txt
 
 ## Evaluation
 
-Run each detector's evaluation separately:
+Datasets are already included in `data/`. Run each detector's evaluation separately:
 
 ```bash
-# Fall Detection   →  92.4%
+# Fall Detection   →  92.40%
 python -m fall_detection.evaluate
 
-# Unsafe Running   →  91.0%
+# Unsafe Running   →  90.99%  (requires ~30-60 min — YOLO runs on 200 video clips)
 python -m running_detection.evaluate
 
-# Long-time Inactivity  →  95.8%
+# Long-time Inactivity  →  95.83%
 python -m inactivity_detection.evaluate
 ```
 
-Download KTH dataset before running detection evaluation:
-```bash
-python -m datasets.download_running
+Each script prints a full summary at the end:
+```
+Accuracy  : 92.40% +/- 3.4%
+Precision : 87.6%
+Recall    : 98.2%
+F1-score  : 92.3%
+[OK] >= 90%
 ```
 
 ---
