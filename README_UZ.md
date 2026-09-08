@@ -159,7 +159,7 @@ Yuqoridagi pre-extracted LOOCV pool'dan alohida, `data/` ichida **to'liq, bitta 
 
 > Bu xom papkalar raqamlar ortida haqiqiy fayllar turganini ko'zga ko'rinadigan tarzda isbotlash uchun bor — aniqlikning o'zi esa yuqoridagi oddiy `evaluate` buyruqlari orqali (qo'shimcha flag'siz) chiqadi, va README'dagi raqamlarni qayta olish uchun aynan shularni ishga tushirish kerak.
 
-> **Git'ga committed emas.** Bu papkalar jami ~10 GB (xom PNG frame'lar og'ir) — bu git repo uchun juda katta hajm, shuning uchun `data/` `.gitignore`da qoladi. Ular git orqali emas, **cloud drive** orqali ulashiladi — `git clone` qilgach avtomatik kelmaydi, havolani so'rab oling.
+> **Git'ga committed emas.** Bu papkalar jami ~10 GB (xom PNG frame'lar og'ir) — bu git repo uchun juda katta hajm, shuning uchun `data/` `.gitignore`da qoladi. Ular git orqali emas, **cloud drive** orqali ulashiladi: **[Test data papkalari (Google Drive)](https://drive.google.com/drive/folders/1ZT5d8DihBuWDdCotHD6W1OxRpeF71I_V?usp=drive_link)** — `git clone` qilgach avtomatik kelmaydi.
 
 ---
 

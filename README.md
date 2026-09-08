@@ -174,7 +174,7 @@ Separate from the pre-extracted LOOCV pool above, `data/` also ships **complete,
 
 > These raw folders exist for a visible, physical proof that real files sit behind the numbers — the accuracy itself is produced by the plain `evaluate` commands above (no extra flags), which is what everyone should run to reproduce the README's numbers.
 
-> **Not committed to git.** These folders total ~10 GB (raw PNG frames are large) — far beyond what a git repo should carry, so `data/` stays in `.gitignore`. They are shared via cloud drive instead; ask for the current link rather than expecting them after a fresh `git clone`.
+> **Not committed to git.** These folders total ~10 GB (raw PNG frames are large) — far beyond what a git repo should carry, so `data/` stays in `.gitignore`. They are shared via cloud drive instead: **[Test data folders (Google Drive)](https://drive.google.com/drive/folders/1ZT5d8DihBuWDdCotHD6W1OxRpeF71I_V?usp=drive_link)** — not included in a fresh `git clone`.
 
 ---
 
