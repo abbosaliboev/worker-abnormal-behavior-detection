@@ -138,10 +138,10 @@ Ogohlantirish (FALL | RUNNING | INACTIVITY)
 
 LOOCV'da qat'iy statik split yo'q — har bir subject navbat bilan test (ko'rmagan) qismga aylanadi, qolganlari threshold fit qilish uchun ishlatiladi. Quyidagi raqamlar fold bo'yicha o'rtacha. Yiqilish va Harakatsizlik **frame** ketma-ketliklari (pose keypoint window'lari) ustida, Yugurish esa to'liq **video klip**lar ustida baholanadi.
 
-| Detektor | Jami frame ketma-ketligi | Jami frame | Train (o'rtacha/fold) | Test (o'rtacha/fold) | Fold soni |
-|---|---|---|---|---|---|
-| Yiqilish | 131 ta frame ketma-ketligi (59 yiqilish + 72 normal) | 69,150 frame (yiqilish: 10,320 / normal: 58,830) | ~98 ta frame ketma-ketligi | ~33 ta frame ketma-ketligi | 4 — har bir UP-Fall subject uchun 1 ta |
-| Harakatsizlik | 48 ta frame ketma-ketligi (24 harakatsiz + 24 aktiv) | 40,500 frame (harakatsiz: 25,530 / aktiv: 14,970), 2,652 ta pose-estimation window'dan guruhlangan | ~36 ta frame ketma-ketligi | ~12 ta frame ketma-ketligi | 4 — har bir UP-Fall subject uchun 1 ta |
+| Detektor | Jami frame | Train (o'rtacha/fold) | Test (o'rtacha/fold) | Fold soni |
+|---|---|---|---|---|
+| Yiqilish | 69,150 frame (yiqilish: 10,320 / normal: 58,830), 131 ta frame ketma-ketligi bo'yicha (59 yiqilish + 72 normal) | ~51,863 frame | ~17,288 frame | 4 — har bir UP-Fall subject uchun 1 ta |
+| Harakatsizlik | 40,500 frame (harakatsiz: 25,530 / aktiv: 14,970), 48 ta frame ketma-ketligi bo'yicha (24 harakatsiz + 24 aktiv), 2,652 ta pose-estimation window'dan guruhlangan | ~30,375 frame | ~10,125 frame | 4 — har bir UP-Fall subject uchun 1 ta |
 
 | Detektor | Jami video klip | Ishlatilgan frame | Train (o'rtacha/fold) | Test (o'rtacha/fold) | Fold soni |
 |---|---|---|---|---|---|

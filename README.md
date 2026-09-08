@@ -153,10 +153,10 @@ Alert  (FALL | RUNNING | INACTIVITY)
 
 LOOCV has no fixed split — each subject rotates through as the held-out test set while the rest are used to fit thresholds. Numbers below are per-fold averages. Fall and Inactivity are evaluated on **frame** sequences (extracted keypoint windows); Running is evaluated on whole **video clips**.
 
-| Detector | Total frame sequences | Total frames | Train (avg/fold) | Test (avg/fold) | Folds |
-|---|---|---|---|---|---|
-| Fall | 131 frame sequences (59 fall + 72 normal) | 69,150 frames (fall: 10,320 / normal: 58,830) | ~98 frame sequences | ~33 frame sequences | 4 — one per UP-Fall subject |
-| Inactivity | 48 frame sequences (24 inactive + 24 active) | 40,500 frames (inactive: 25,530 / active: 14,970), grouped from 2,652 pose-estimation windows | ~36 frame sequences | ~12 frame sequences | 4 — one per UP-Fall subject |
+| Detector | Total frames | Train (avg/fold) | Test (avg/fold) | Folds |
+|---|---|---|---|---|
+| Fall | 69,150 frames (fall: 10,320 / normal: 58,830), across 131 frame sequences (59 fall + 72 normal) | ~51,863 frames | ~17,288 frames | 4 — one per UP-Fall subject |
+| Inactivity | 40,500 frames (inactive: 25,530 / active: 14,970), across 48 frame sequences (24 inactive + 24 active), from 2,652 pose-estimation windows | ~30,375 frames | ~10,125 frames | 4 — one per UP-Fall subject |
 
 | Detector | Total video clips | Frames processed | Train (avg/fold) | Test (avg/fold) | Folds |
 |---|---|---|---|---|---|
