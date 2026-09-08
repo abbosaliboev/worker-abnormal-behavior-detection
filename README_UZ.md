@@ -134,6 +134,18 @@ Ogohlantirish (FALL | RUNNING | INACTIVITY)
 - **Klip uzunligi:** ~15 soniya (150 kadr ishlatildi)
 - **Maqsad:** Running aniqlash baholash
 
+### To'liq Dataset vs. Bizning Ishlatganimiz
+
+Ikkala ochiq dataset ham biz baholaganimizdan kattaroq. Quyidagi jadval "to'liq datasetning qanchasini ishlatdik, va README'dagi aniqlik qancha test datadan chiqqan" degan savolga to'g'ridan-to'g'ri javob:
+
+| Xatti-harakat | To'liq ochiq dataset | Biz ishlatganimiz (train+test) | Rasmiy aniqlik ortidagi test data |
+|---|---|---|---|
+| Yiqilish | UP-Fall — jami **17 ta subject** | **17 tadan 4 tasi** (Subject 1–4), barcha 11 activity, barcha trial | **69,150 frame** — shu 4 ta subjectning har bir frame'i 4 ta LOOCV fold bo'yicha aynan bir marta test qilingan |
+| Harakatsizlik | UP-Fall — jami **17 ta subject** (Yiqilish bilan bir xil manba) | Xuddi shu **17 tadan 4 tasi**, faqat activity 6–9 (yurish/turish/o'tirish/narsa ko'tarish) | **40,500 frame** — xuddi shu 4-fold LOOCV, har bir frame bir marta test qilingan |
+| Yugurish | KTH — jami **25 ta subject** | **25 tadan 25 tasi** (100% — hech qanday qism olib tashlanmagan) | **200 ta video klip** — har bir klip 2 ta LOOCV fold bo'yicha aynan bir marta test qilingan |
+
+> Yiqilish va Harakatsizlik ataylab UP-Fall'ning 17 ta subjectidan faqat 4 tasini ishlatadi (Subject 5–17'ga umuman tegilmagan — na train, na test uchun). Yugurish esa butun KTH datasetini ishlatadi. Yuqorida "ishlatilgan" deb ko'rsatilgan subject/klip'lar — aynan shular README'dagi 92.40% / 95.83% / 90.99% qayerdan chiqqanini bildiruvchi test data ham hisoblanadi, chunki LOOCV'da ishlatilgan har bir subject yoki klip aynan bir marta chetlashtirilib test qilinadi.
+
 ### Train / Test Taqsimoti (LOOCV)
 
 LOOCV'da qat'iy statik split yo'q — har bir subject navbat bilan test (ko'rmagan) qismga aylanadi, qolganlari threshold fit qilish uchun ishlatiladi. Quyidagi raqamlar fold bo'yicha o'rtacha. Yiqilish va Harakatsizlik **frame** ketma-ketliklari (pose keypoint window'lari) ustida, Yugurish esa to'liq **video klip**lar ustida baholanadi.

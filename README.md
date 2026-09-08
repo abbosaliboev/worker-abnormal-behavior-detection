@@ -149,6 +149,18 @@ Alert  (FALL | RUNNING | INACTIVITY)
 - **Clip length:** ~15 seconds each (first 150 frames used)
 - **Used for:** Running detection evaluation
 
+### Full Dataset vs. What We Actually Used
+
+Both public datasets are larger than what we evaluate on. This table is the direct answer to "how much of the full dataset did you use, and how much test data actually produced the README's accuracy":
+
+| Behavior | Full public dataset | What we used (train+test) | Test data behind the reported accuracy |
+|---|---|---|---|
+| Fall | UP-Fall — **17 subjects** total | **4 of 17 subjects** (Subject 1–4), all 11 activities, all trials | **69,150 frames** — every one of those 4 subjects' frames is tested exactly once, across the 4 LOOCV folds |
+| Inactivity | UP-Fall — **17 subjects** total (same source as Fall) | Same **4 of 17 subjects**, only activities 6–9 (walking/standing/sitting/picking up) | **40,500 frames** — same 4-fold LOOCV, every frame tested once |
+| Running | KTH — **25 subjects** total | **25 of 25 subjects** (100% — no subset taken) | **200 video clips** — every clip tested exactly once, across the 2 LOOCV folds |
+
+> Fall and Inactivity deliberately use only 4 of UP-Fall's 17 subjects (Subjects 5–17 were never touched, for training or testing). Running uses the entire KTH dataset. Whichever subjects/clips are "used" above is also, in total, the test data that the README's 92.40% / 95.83% / 90.99% were computed from — LOOCV means every used subject or clip is held out and scored exactly once.
+
 ### Train / Test Split (LOOCV)
 
 LOOCV has no fixed split — each subject rotates through as the held-out test set while the rest are used to fit thresholds. Numbers below are per-fold averages. Fall and Inactivity are evaluated on **frame** sequences (extracted keypoint windows); Running is evaluated on whole **video clips**.
