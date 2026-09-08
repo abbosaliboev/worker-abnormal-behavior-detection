@@ -138,10 +138,10 @@ ByteTracker   →  작업자별 고유 ID 부여
 
 LOOCV는 고정된 분할이 없습니다 — 각 피험자가 번갈아 테스트(홀드아웃) 대상이 되고, 나머지는 threshold를 fitting하는 데 사용됩니다. 아래 수치는 fold별 평균입니다. 낙상과 무활동은 **프레임** 시퀀스(포즈 keypoint 윈도우)로 평가되고, 달리기는 전체 **비디오 클립** 단위로 평가됩니다.
 
-| 감지기 | 총 클립 수 (프레임 시퀀스) | 총 프레임 수 | Train (fold당 평균) | Test (fold당 평균) | Fold 수 |
+| 감지기 | 총 프레임 시퀀스 수 | 총 프레임 수 | Train (fold당 평균) | Test (fold당 평균) | Fold 수 |
 |---|---|---|---|---|---|
-| 낙상 | 131개 클립 (낙상 59 + 정상 72) | 69,150 프레임 (낙상: 10,320 / 정상: 58,830) | ~98개 클립 | ~33개 클립 | 4 — UP-Fall 피험자별 1개 |
-| 무활동 | 48개 클립 (무활동 24 + 활동 24) | 40,500 프레임 (무활동: 25,530 / 활동: 14,970), 포즈 추정 윈도우 2,652개에서 그룹화됨 | ~36개 클립 | ~12개 클립 | 4 — UP-Fall 피험자별 1개 |
+| 낙상 | 프레임 시퀀스 131개 (낙상 59 + 정상 72) | 69,150 프레임 (낙상: 10,320 / 정상: 58,830) | 프레임 시퀀스 ~98개 | 프레임 시퀀스 ~33개 | 4 — UP-Fall 피험자별 1개 |
+| 무활동 | 프레임 시퀀스 48개 (무활동 24 + 활동 24) | 40,500 프레임 (무활동: 25,530 / 활동: 14,970), 포즈 추정 윈도우 2,652개에서 그룹화됨 | 프레임 시퀀스 ~36개 | 프레임 시퀀스 ~12개 | 4 — UP-Fall 피험자별 1개 |
 
 | 감지기 | 총 비디오 클립 수 | 처리된 프레임 수 | Train (fold당 평균) | Test (fold당 평균) | Fold 수 |
 |---|---|---|---|---|---|
@@ -149,12 +149,12 @@ LOOCV는 고정된 분할이 없습니다 — 각 피험자가 번갈아 테스�
 
 ### 예시 테스트 데이터 폴더
 
-위의 pre-extracted LOOCV 데이터 풀과 별도로, `data/`에는 **완전한, 단일 fold 테스트 세트**도 있습니다 — 실제 원본(raw) 데이터로 구성된, 하나의 LOOCV fold 전체의 실제 held-out(홀드아웃) 클립이며, 단순 샘플이 아닙니다. 낙상과 무활동은 held-out된 Subject1의 원본 **프레임** 시퀀스(전체 11개 activity, Camera1만)를 사용하고, 달리기는 held-out된 홀수 피험자 그룹을 전체 **비디오 클립**으로 사용합니다.
+위의 pre-extracted LOOCV 데이터 풀과 별도로, `data/`에는 **완전한, 단일 fold 테스트 세트**도 있습니다 — 실제 원본(raw) 데이터로 구성된, 하나의 LOOCV fold 전체의 실제 held-out(홀드아웃) 데이터이며, 단순 샘플이 아닙니다. 낙상과 무활동은 프레임 데이터입니다 — held-out된 Subject1의 원본 **프레임** 시퀀스(전체 11개 activity, Camera1만); 달리기는 held-out된 홀수 피험자 그룹을 전체 **비디오 클립**으로 사용합니다.
 
 | 폴더 | 내용 | 대상 행동 | 이 fold의 결과 확인 |
 |---|---|---|---|
-| `data/test_upfall/` | Subject1의 완전한 fold — **33개 클립 / 17,932 프레임** (낙상 activity 1–5: 2,832 프레임; 정상 activity 6–11: 15,100 프레임) | 낙상 | `python -m fall_detection.evaluate` — Subject1 행: **90.9%** (TN=15 FP=3 FN=0 TP=15) |
-| `data/test_inactivity/` | Subject1의 완전한 fold — **12개 클립 / 10,431 프레임** (무활동 Act7+8: 6,527 프레임; 활동 Act6+9: 3,904 프레임) | 무활동 | `python -m inactivity_detection.evaluate` — Subject1 행: **100.0%** (TN=6 FP=0 FN=0 TP=6) |
+| `data/test_upfall/` | Subject1의 완전한 fold — 프레임 시퀀스 33개에 걸친 **17,932 프레임** (낙상 activity 1–5: 2,832 프레임; 정상 activity 6–11: 15,100 프레임) | 낙상 | `python -m fall_detection.evaluate` — Subject1 행: **90.9%** (TN=15 FP=3 FN=0 TP=15) |
+| `data/test_inactivity/` | Subject1의 완전한 fold — 프레임 시퀀스 12개에 걸친 **10,431 프레임** (무활동 Act7+8: 6,527 프레임; 활동 Act6+9: 3,904 프레임) | 무활동 | `python -m inactivity_detection.evaluate` — Subject1 행: **100.0%** (TN=6 FP=0 FN=0 TP=6) |
 | `data/test_running/` | 홀수 피험자 그룹의 완전한 fold — **104개 비디오 클립** (KTH 피험자 13명) | 달리기 | `python main.py --source data/test_running/person01_running_d1_uncomp.avi` (시각적 확인), 또는 `python -m running_detection.evaluate`의 Fold 1 |
 
 > 이 원본 폴더들은 수치 뒤에 실제 파일이 있다는 것을 눈으로 확인시켜 주기 위한 것입니다 — 정확도 자체는 위의 플레인 `evaluate` 명령(추가 플래그 없이)으로 산출되며, README의 수치를 재현하려면 바로 그 명령을 실행하면 됩니다.

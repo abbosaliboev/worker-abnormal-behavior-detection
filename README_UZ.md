@@ -138,10 +138,10 @@ Ogohlantirish (FALL | RUNNING | INACTIVITY)
 
 LOOCV'da qat'iy statik split yo'q — har bir subject navbat bilan test (ko'rmagan) qismga aylanadi, qolganlari threshold fit qilish uchun ishlatiladi. Quyidagi raqamlar fold bo'yicha o'rtacha. Yiqilish va Harakatsizlik **frame** ketma-ketliklari (pose keypoint window'lari) ustida, Yugurish esa to'liq **video klip**lar ustida baholanadi.
 
-| Detektor | Jami klip (frame ketma-ketligi) | Jami frame | Train (o'rtacha/fold) | Test (o'rtacha/fold) | Fold soni |
+| Detektor | Jami frame ketma-ketligi | Jami frame | Train (o'rtacha/fold) | Test (o'rtacha/fold) | Fold soni |
 |---|---|---|---|---|---|
-| Yiqilish | 131 klip (59 yiqilish + 72 normal) | 69,150 frame (yiqilish: 10,320 / normal: 58,830) | ~98 klip | ~33 klip | 4 — har bir UP-Fall subject uchun 1 ta |
-| Harakatsizlik | 48 klip (24 harakatsiz + 24 aktiv) | 40,500 frame (harakatsiz: 25,530 / aktiv: 14,970), 2,652 ta pose-estimation window'dan guruhlangan | ~36 klip | ~12 klip | 4 — har bir UP-Fall subject uchun 1 ta |
+| Yiqilish | 131 ta frame ketma-ketligi (59 yiqilish + 72 normal) | 69,150 frame (yiqilish: 10,320 / normal: 58,830) | ~98 ta frame ketma-ketligi | ~33 ta frame ketma-ketligi | 4 — har bir UP-Fall subject uchun 1 ta |
+| Harakatsizlik | 48 ta frame ketma-ketligi (24 harakatsiz + 24 aktiv) | 40,500 frame (harakatsiz: 25,530 / aktiv: 14,970), 2,652 ta pose-estimation window'dan guruhlangan | ~36 ta frame ketma-ketligi | ~12 ta frame ketma-ketligi | 4 — har bir UP-Fall subject uchun 1 ta |
 
 | Detektor | Jami video klip | Ishlatilgan frame | Train (o'rtacha/fold) | Test (o'rtacha/fold) | Fold soni |
 |---|---|---|---|---|---|
@@ -149,12 +149,12 @@ LOOCV'da qat'iy statik split yo'q — har bir subject navbat bilan test (ko'rmag
 
 ### Test Uchun Namuna Papkalar
 
-Yuqoridagi pre-extracted LOOCV pool'dan alohida, `data/` ichida **to'liq, bitta fold'lik test to'plamlari** ham bor — bular xom (real) datadan tuzilgan, bitta to'liq LOOCV fold'ning haqiqiy ushlab qolingan (held-out) qismi, shunchaki namuna emas. Yiqilish va Harakatsizlik ushlab qolingan Subject1'ning xom **frame** ketma-ketliklarini (barcha 11 activity, faqat Camera1) ishlatadi; Yugurish esa ushlab qolingan toq-raqamli subject guruhini to'liq **video klip** sifatida ishlatadi.
+Yuqoridagi pre-extracted LOOCV pool'dan alohida, `data/` ichida **to'liq, bitta fold'lik test to'plamlari** ham bor — bular xom (real) datadan tuzilgan, bitta to'liq LOOCV fold'ning haqiqiy ushlab qolingan (held-out) qismi, shunchaki namuna emas. Yiqilish va Harakatsizlik — frame dataси: ushlab qolingan Subject1'ning xom **frame** ketma-ketliklari (barcha 11 activity, faqat Camera1); Yugurish esa ushlab qolingan toq-raqamli subject guruhini to'liq **video klip** sifatida ishlatadi.
 
 | Papka | Tarkibi | Xatti-harakat | Shu fold natijasini ko'rish |
 |---|---|---|---|
-| `data/test_upfall/` | Subject1'ning to'liq foldi — **33 klip / 17,932 frame** (yiqilish activity 1–5: 2,832 frame; normal activity 6–11: 15,100 frame) | Yiqilish | `python -m fall_detection.evaluate` — Subject1 qatori: **90.9%** (TN=15 FP=3 FN=0 TP=15) |
-| `data/test_inactivity/` | Subject1'ning to'liq foldi — **12 klip / 10,431 frame** (harakatsiz Act7+8: 6,527 frame; aktiv Act6+9: 3,904 frame) | Harakatsizlik | `python -m inactivity_detection.evaluate` — Subject1 qatori: **100.0%** (TN=6 FP=0 FN=0 TP=6) |
+| `data/test_upfall/` | Subject1'ning to'liq foldi — **33 ta frame ketma-ketligi bo'yicha 17,932 frame** (yiqilish activity 1–5: 2,832 frame; normal activity 6–11: 15,100 frame) | Yiqilish | `python -m fall_detection.evaluate` — Subject1 qatori: **90.9%** (TN=15 FP=3 FN=0 TP=15) |
+| `data/test_inactivity/` | Subject1'ning to'liq foldi — **12 ta frame ketma-ketligi bo'yicha 10,431 frame** (harakatsiz Act7+8: 6,527 frame; aktiv Act6+9: 3,904 frame) | Harakatsizlik | `python -m inactivity_detection.evaluate` — Subject1 qatori: **100.0%** (TN=6 FP=0 FN=0 TP=6) |
 | `data/test_running/` | Toq-raqamli subject guruhining to'liq foldi — **104 ta video klip** (13 ta KTH subject) | Yugurish | `python main.py --source data/test_running/person01_running_d1_uncomp.avi` (vizual tekshiruv), yoki `python -m running_detection.evaluate`ning Fold 1 qismi |
 
 > Bu xom papkalar raqamlar ortida haqiqiy fayllar turganini ko'zga ko'rinadigan tarzda isbotlash uchun bor — aniqlikning o'zi esa yuqoridagi oddiy `evaluate` buyruqlari orqali (qo'shimcha flag'siz) chiqadi, va README'dagi raqamlarni qayta olish uchun aynan shularni ishga tushirish kerak.
