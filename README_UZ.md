@@ -184,17 +184,18 @@ pip install -r requirements.txt
 
 ## Baholash
 
-Har bir detektor uchun alohida baholash:
+`data/upfall_npy/` (oldindan chiqarilgan keypoint'lar, ~27 MB) shu repo'ga committed — shuning uchun clone qilgach Fall va Inactivity darhol ishlaydi. Running uchun esa KTH video klip'lari kerak, ular git'ga **committed emas** (juda katta) — avval quyidagi ochiq, bir buyruqli skript bilan yuklab oling.
 
 ```bash
-# Yiqilish aniqlash  →  92.4%
+# Yiqilish aniqlash  →  92.40%  (data/upfall_npy repo'da allaqachon bor)
 python -m fall_detection.evaluate
 
-# Xavfli yugurish  →  90.4%
-python -m running_detection.evaluate
-
-# Uzoq harakatsizlik  →  95.8%
+# Uzoq harakatsizlik  →  95.83%  (xuddi shu data/upfall_npy)
 python -m inactivity_detection.evaluate
+
+# Xavfli yugurish  →  90.99%
+python -m datasets.download_running     # bir martalik: data/running_dataset (~290 MB) ni kth.se'dan yuklaydi
+python -m running_detection.evaluate    # ~30-60 daqiqa — YOLO 200 ta video klipda ishlaydi
 ```
 
 KTH datasetni yuklab olish (yugurish baholashdan oldin):

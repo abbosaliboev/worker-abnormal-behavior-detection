@@ -190,17 +190,18 @@ pip install -r requirements.txt
 
 ## Evaluation
 
-Datasets are already included in `data/`. Run each detector's evaluation separately:
+`data/upfall_npy/` (pre-extracted keypoints, ~27 MB) is committed to this repo, so Fall and Inactivity run immediately after cloning. Running needs the KTH video clips, which are **not** committed (too large for git) — download them first with the public, one-command script below.
 
 ```bash
-# Fall Detection   →  92.40%
+# Fall Detection   →  92.40%  (data/upfall_npy is already in the repo)
 python -m fall_detection.evaluate
 
-# Unsafe Running   →  90.99%  (requires ~30-60 min — YOLO runs on 200 video clips)
-python -m running_detection.evaluate
-
-# Long-time Inactivity  →  95.83%
+# Long-time Inactivity  →  95.83%  (same data/upfall_npy)
 python -m inactivity_detection.evaluate
+
+# Unsafe Running   →  90.99%
+python -m datasets.download_running     # one-time: fetches data/running_dataset (~290 MB) from kth.se
+python -m running_detection.evaluate    # ~30-60 min — YOLO runs on 200 video clips
 ```
 
 Each script prints a full summary at the end:

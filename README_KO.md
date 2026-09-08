@@ -184,17 +184,18 @@ pip install -r requirements.txt
 
 ## 평가
 
-각 감지기를 개별적으로 평가:
+`data/upfall_npy/`(사전 추출된 keypoint, ~27MB)는 이 저장소에 커밋되어 있어 클론 후 낙상/무활동 평가가 바로 동작합니다. 달리기는 KTH 비디오 클립이 필요하며, 이는 git에 **커밋되어 있지 않습니다**(용량이 너무 큼) — 아래의 공개 원클릭 스크립트로 먼저 다운로드하세요.
 
 ```bash
-# 낙상 감지  →  92.4%
+# 낙상 감지  →  92.40%  (data/upfall_npy는 저장소에 이미 포함됨)
 python -m fall_detection.evaluate
 
-# 위험한 달리기  →  90.4%
-python -m running_detection.evaluate
-
-# 장시간 무활동  →  95.8%
+# 장시간 무활동  →  95.83%  (동일한 data/upfall_npy 사용)
 python -m inactivity_detection.evaluate
+
+# 위험한 달리기  →  90.99%
+python -m datasets.download_running     # 1회성: kth.se에서 data/running_dataset (~290MB) 다운로드
+python -m running_detection.evaluate    # ~30-60분 — YOLO가 200개 비디오 클립에서 실행됨
 ```
 
 달리기 평가 전 KTH 데이터셋 다운로드:

@@ -16,7 +16,12 @@ __pycache__/
 *.rar
 
 # Dataset folders
-data/
+data/*
+!data/upfall_npy/
+data/upfall_npy/*
+!data/upfall_npy/X.npy
+!data/upfall_npy/y.npy
+!data/upfall_npy/meta.csv
 iccas/subject1_2_3_4/cv_dataset/
 iccas/subject1_2_3_4/checkpoints/best_stgcn.pth
 
