@@ -149,6 +149,33 @@ Alert  (FALL | RUNNING | INACTIVITY)
 - **Clip length:** ~15 seconds each (first 150 frames used)
 - **Used for:** Running detection evaluation
 
+### Train / Test Split (LOOCV)
+
+LOOCV has no fixed split — each subject rotates through as the held-out test set while the rest are used to fit thresholds. Numbers below are per-fold averages. Fall and Inactivity are evaluated on **frame** sequences (extracted keypoint windows); Running is evaluated on whole **video clips**.
+
+| Detector | Total clips (frame sequences) | Total frames | Train (avg/fold) | Test (avg/fold) | Folds |
+|---|---|---|---|---|---|
+| Fall | 131 clips (59 fall + 72 normal) | 69,150 frames (fall: 10,320 / normal: 58,830) | ~98 clips | ~33 clips | 4 — one per UP-Fall subject |
+| Inactivity | 48 clips (24 inactive + 24 active) | 40,500 frames (inactive: 25,530 / active: 14,970), grouped from 2,652 pose-estimation windows | ~36 clips | ~12 clips | 4 — one per UP-Fall subject |
+
+| Detector | Total video clips | Frames processed | Train (avg/fold) | Test (avg/fold) | Folds |
+|---|---|---|---|---|---|
+| Running | 200 video clips (100 running + 100 walking) | 30,000 frames (150 frames/video clip cap; clips average 521 frames each) | ~100 video clips | ~100 video clips | 2 — odd vs even KTH subjects |
+
+### Example Test-Data Folders
+
+Separate from the pre-extracted LOOCV pool above, `data/` also ships **complete, single-fold test sets** built from real (not synthetic) raw data — the actual held-out clips for one full LOOCV fold, not a token sample. Fall and Inactivity use the raw **frame** sequences of held-out Subject1 (all 11 activities, Camera1 only); Running uses the held-out odd-subject group as whole **video clips**.
+
+| Folder | Contents | Behavior | See this fold's result |
+|---|---|---|---|
+| `data/test_upfall/` | Complete Subject1 fold — **33 clips / 17,932 frames** (fall activities 1–5: 2,832 frames; normal activities 6–11: 15,100 frames) | Fall | `python -m fall_detection.evaluate` — Subject1's line: **90.9%** (TN=15 FP=3 FN=0 TP=15) |
+| `data/test_inactivity/` | Complete Subject1 fold — **12 clips / 10,431 frames** (inactive Act7+8: 6,527 frames; active Act6+9: 3,904 frames) | Inactivity | `python -m inactivity_detection.evaluate` — Subject1's line: **100.0%** (TN=6 FP=0 FN=0 TP=6) |
+| `data/test_running/` | Complete odd-subject fold — **104 video clips** (13 KTH subjects) | Running | `python main.py --source data/test_running/person01_running_d1_uncomp.avi` (visual check), or Fold 1 of `python -m running_detection.evaluate` |
+
+> These raw folders exist for a visible, physical proof that real files sit behind the numbers — the accuracy itself is produced by the plain `evaluate` commands above (no extra flags), which is what everyone should run to reproduce the README's numbers.
+
+> **Not committed to git.** These folders total ~10 GB (raw PNG frames are large) — far beyond what a git repo should carry, so `data/` stays in `.gitignore`. They are shared via cloud drive instead; ask for the current link rather than expecting them after a fresh `git clone`.
+
 ---
 
 ## Installation

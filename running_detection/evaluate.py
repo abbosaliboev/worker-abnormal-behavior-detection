@@ -18,8 +18,9 @@ from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_sc
 
 from src.pose_extractor import PoseExtractor
 from src.feature_extractor import FeatureBuffer
+from src.config import KTH_DATA_DIR
 
-DATA_DIR = r"f:\Project_F\Company_Abnormal_Project\data\running_dataset"
+DATA_DIR = KTH_DATA_DIR
 KTH_FPS  = 25.0
 
 
